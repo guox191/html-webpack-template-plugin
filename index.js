@@ -6,6 +6,7 @@ const yaml = require('js-yaml')
 const Handlebars = require('./lib/handlebars')
 
 let rootPath = process.cwd()
+let tplEngine = ['handlebars', 'ejs']
 
 function HtmlWebpackTemplate(options) {
   if (!options.template) {
@@ -15,6 +16,11 @@ function HtmlWebpackTemplate(options) {
   if (options.root) {
     let optionRoot = options.root
     rootPath = path.isAbsolute(optionRoot) ? optionRoot : path.resolve(__dirname, optionRoot)
+  }
+  if (!options.engine && String(tplEngine).toLowerCase().indexOf(options.engine) === -1) {
+    options.engine = tplEngine[0]
+  } else {
+    options.engine = options.engine.toLowerCase()
   }
   this.options = options
 }
@@ -40,6 +46,7 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       if (htmlPluginConf.disableTemplate) {
         return cb(null, htmlData)
       }
+
       let tplExtension = (htmlPluginConf.template.match(/\.(\w*)$/) || ['']).pop()
       let htmlConf
       if (tplExtension.match(/ya?ml/)) {
@@ -53,7 +60,8 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
           htmlConf = {}
         }
       }
-      let targetHtml = Handlebars.compile(tplContent)(htmlConf)
+
+      let targetHtml = require(_this.options.engine).compile(tplContent)(htmlConf)
       htmlData.html = targetHtml
       cb(null, htmlData)
     })
