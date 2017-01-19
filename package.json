@@ -1,0 +1,32 @@
+{
+  "name": "html-webpack-template-plugin",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guox191/html-webpack-template-plugin.git"
+  },
+  "author": "Guox (guoxiang191@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/guox191/html-webpack-template-plugin/issues"
+  },
+  "files": [
+    "index.js",
+    "lib/"
+  ],
+  "homepage": "https://github.com/guox191/html-webpack-template-plugin#readme",
+  "dependencies": {
+    "handlebars": "^4.0.6",
+    "js-yaml": "^3.7.0"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^2.26.0",
+    "mocha": "^3.2.0",
+    "webpack": "^1.14.0"
+  }
+}
