@@ -10,8 +10,7 @@ let tplEngine = ['handlebars', 'ejs']
 
 function HtmlWebpackTemplate(options) {
   if (!options.template) {
-    this.invalid = true
-    console.error('invalid HtmlWebpackTemplate options!')
+    throw new Error('No `template` option found')
   }
   if (options.root) {
     let optionRoot = options.root
@@ -26,7 +25,6 @@ function HtmlWebpackTemplate(options) {
 }
 
 HtmlWebpackTemplate.prototype.apply = function (compiler) {
-  if (this.invalid) return
   let _this = this
   let tplContent = ''
 
@@ -34,10 +32,13 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
     let tplPath = path.isAbsolute(_this.options.template)
       ? _this.options.template
       : path.join(rootPath, _this.options.template)
-    tplContent = fs.readFileSync(tplPath, {
+    fs.readFile(tplPath, {
       encoding: 'utf-8'
+    }, function (error, data) {
+      if (error) throw error
+      tplContent = data
+      callback()
     })
-    callback()
   })
 
   compiler.plugin('compilation', function (compilation) {
@@ -50,7 +51,12 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       let tplExtension = (htmlPluginConf.template.match(/\.(\w*)$/) || ['']).pop()
       let htmlConf
       if (tplExtension.match(/ya?ml/)) {
-        htmlConf = require('js-yaml').safeLoad(htmlData.html)
+        try {
+          htmlConf = require('js-yaml').safeLoad(htmlData.html)
+        } catch (error) {
+          error.message = htmlData.plugin.options.filename + ': ' + error.message
+          throw error
+        }
       } else if (tplExtension === 'js') {
         htmlConf = require(path.resolve(rootPath, htmlPluginConf.template))
       } else {
