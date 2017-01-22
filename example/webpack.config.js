@@ -6,7 +6,7 @@ const htmlTemplatePlugin = require('..')
 const path = require('path')
 const ROOT_PATH = __dirname
 const DIST_PATH = path.join(ROOT_PATH, 'dist')
-const entryPages = [
+const ENTRY_PAGE = [
   {
     chunkName: 'page1',
     src: './page1',
@@ -17,10 +17,17 @@ const entryPages = [
     chunks: []
   }
 ]
+const MINIFY_OPTION = {
+  removeComments: true,
+  collapseWhitespace: true,
+  minifyJS: true,
+  minifyCSS: true
+}
 
-let entryHtmlPlugins = entryPages.map(item => new htmlWebpackPlugin({
+let entryHtmlPlugins = ENTRY_PAGE.map(item => new htmlWebpackPlugin({
   filename: `${item.chunkName}/index.html`,
   template: `${item.src}/index.yml`,
+  minify: MINIFY_OPTION,
   chunks: ['common', item.chunkName].concat(item.chunks)
 }))
 
