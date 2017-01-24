@@ -2,8 +2,7 @@
 
 const path = require('path')
 const fs = require('fs')
-const yaml = require('js-yaml')
-const Handlebars = require('./lib/handlebars')
+const loadConfig = require('./lib/load-config')
 
 let rootPath = process.cwd()
 let tplEngine = ['handlebars', 'ejs']
@@ -47,26 +46,15 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       if (htmlPluginConf.disableTemplate) {
         return cb(null, htmlData)
       }
-
       let tplExtension = (htmlPluginConf.template.match(/\.(\w*)$/) || ['']).pop()
       let htmlConf
-      if (tplExtension.match(/ya?ml/)) {
-        try {
-          htmlConf = require('js-yaml').safeLoad(htmlData.html)
-        } catch (error) {
-          error.message = htmlData.plugin.options.filename + ': ' + error.message
-          throw error
-        }
-      } else if (tplExtension === 'js') {
-        htmlConf = require(path.resolve(rootPath, htmlPluginConf.template))
-      } else {
-        try {
-          htmlConf = JSON.parse(htmlData.html)
-        } catch (error) {
-          htmlConf = {}
-        }
+      try {
+        console.log(htmlData)
+        htmlConf = loadConfig(htmlData.html, tplExtension)
+      } catch (error) {
+        error.message = htmlPluginConf.filename + ': ' + error.message
+        throw error
       }
-
       let targetHtml = require(_this.options.engine).compile(tplContent)(htmlConf)
       htmlData.html = targetHtml
       cb(null, htmlData)

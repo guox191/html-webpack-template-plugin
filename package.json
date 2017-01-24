@@ -4,7 +4,7 @@
   "description": "Simplifies creation of HTML files based on template and config file",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha ./test --recursive"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "js-yaml": "^3.7.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "html-webpack-plugin": "^2.26.0",
     "mocha": "^3.2.0",
     "webpack": "^1.14.0"

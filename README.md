@@ -1,5 +1,9 @@
 # html-webpack-template-plugin
 
+[![npm](https://nodei.co/npm/html-webpack-template-plugin.png?downloads=true)](https://www.npmjs.com/package/html-webpack-template-plugin)
+
+[![travis](https://travis-ci.org/guox191/html-webpack-template-plugin.svg?branch=master)](https://travis-ci.org/guox191/html-webpack-template-plugin)
+
 Simplifies creation of HTML files based on template and config file Edit.
 
 In most MPA(Multi Page App) project, multi page modules share one context, common libraries etc, and under the same webpack build config. Also, every module own its `index.html` which include its resources with the awesome [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin).
@@ -78,6 +82,9 @@ var webpackConfig = {
 - `root`: project root path. Default to `process.cwd()`
 - `engine`: `handlebars`(default) | `ejs`
 - `template`: [required] template file location
+
+Extra options added in `htmlWebpackPlugin`:
+- `disableTemplate`: `true` | `false`(default)
 
 ### License
 ---

@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const htmlTemplatePlugin = require('..')
 const path = require('path')
+const CONFIG_TYPE = process.env.CONFIG_TYPE || 'yml'
 const ROOT_PATH = __dirname
 const DIST_PATH = path.join(ROOT_PATH, 'dist')
 const ENTRY_PAGE = [
@@ -26,7 +27,7 @@ const MINIFY_OPTION = {
 
 let entryHtmlPlugins = ENTRY_PAGE.map(item => new htmlWebpackPlugin({
   filename: `${item.chunkName}/index.html`,
-  template: `${item.src}/index.yml`,
+  template: `${item.src}/config.${CONFIG_TYPE}`,
   minify: MINIFY_OPTION,
   chunks: ['common', item.chunkName].concat(item.chunks)
 }))
