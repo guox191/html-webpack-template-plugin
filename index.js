@@ -20,7 +20,12 @@ function HtmlWebpackTemplate(options) {
   } else {
     options.engine = options.engine.toLowerCase()
   }
-  this.options = options
+  this.options = {
+    template: options.template,
+    root: options.root,
+    engine: options.engine
+  }
+  this.variableMap = options.variable || {}
 }
 
 HtmlWebpackTemplate.prototype.apply = function (compiler) {
@@ -49,13 +54,13 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       let tplExtension = (htmlPluginConf.template.match(/\.(\w*)$/) || ['']).pop()
       let htmlConf
       try {
-        console.log(htmlData)
         htmlConf = loadConfig(htmlData.html, tplExtension)
       } catch (error) {
         error.message = htmlPluginConf.filename + ': ' + error.message
         throw error
       }
-      let targetHtml = require(_this.options.engine).compile(tplContent)(htmlConf)
+      htmlConf = Object.assign(htmlConf, _this.variableMap)
+      let targetHtml = require('./lib/' + _this.options.engine).compile(tplContent)(htmlConf)
       htmlData.html = targetHtml
       cb(null, htmlData)
     })

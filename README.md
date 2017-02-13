@@ -79,12 +79,14 @@ var webpackConfig = {
 
 ### Configuration
 ---
-- `root`: project root path. Default to `process.cwd()`
-- `engine`: `handlebars`(default) | `ejs`
-- `template`: [required] template file location
+- `root`: project root path. Default to `process.cwd()`.
+- `engine`: `handlebars`(default) | `ejs`.
+- `template`: [required] template file location.
+- `variable`: `Object` A map of predefined variables which will be injected into 
+template and can be overwrote by config file.
 
-Extra options added in `htmlWebpackPlugin`:
-- `disableTemplate`: `true` | `false`(default)
+Extra options added in htmlWebpackPlugin:
+- `disableTemplate`: `true` | `false`(default).
 
 ### License
 ---

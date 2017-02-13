@@ -11,6 +11,10 @@
   {{/each}}
 </head>
 <body>
+  {{preInjected}}
+  {{#each testArray}}
+  {{this}}
+  {{/each}}
   {{#if body}}
   {{{body}}}
   {{else}}

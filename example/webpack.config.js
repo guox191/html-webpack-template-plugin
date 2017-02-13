@@ -46,7 +46,14 @@ module.exports = {
     new htmlTemplatePlugin({
       root: __dirname,
       template: './index.hbs',
-      engine: 'handlebars'
+      engine: 'handlebars',
+      variable: {
+        'preInjected': 'This variable was injected from plugin definition',
+        'testArray': [
+          'test1',
+          'test2'
+        ]
+      }
     })
   ])
 }
