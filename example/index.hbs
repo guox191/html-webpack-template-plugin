@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edag">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {{{metaTag meta}}}
-  <title>{{config title 'html-webpack-template-plugin example'}}</title>
+  {{{meta meta}}}
+  <title>{{default title 'html-webpack-template-plugin example'}}</title>
   {{#each stylesheets}}
   <link rel="stylesheets" href="{{this}}">
   {{/each}}
@@ -20,9 +20,7 @@
   {{else}}
   <div id="#app"></app>
   {{/if}}
-  {{#each scripts}}
-  <script src="{{this}}"></script>
-  {{/each}}
+  {{{script scripts }}}
 </body>
 </html>
 

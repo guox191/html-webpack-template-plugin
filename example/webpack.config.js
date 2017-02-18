@@ -22,7 +22,8 @@ const MINIFY_OPTION = {
   removeComments: true,
   collapseWhitespace: true,
   minifyJS: true,
-  minifyCSS: true
+  minifyCSS: true,
+  collapseBooleanAttributes: true
 }
 
 let entryHtmlPlugins = ENTRY_PAGE.map(item => new htmlWebpackPlugin({

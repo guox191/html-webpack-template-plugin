@@ -60,7 +60,7 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
         throw error
       }
       htmlConf = Object.assign(htmlConf, _this.variableMap)
-      let targetHtml = require('./lib/' + _this.options.engine).compile(tplContent)(htmlConf)
+      let targetHtml = require('./lib/engines/' + _this.options.engine).compile(tplContent)(htmlConf)
       htmlData.html = targetHtml
       cb(null, htmlData)
     })
