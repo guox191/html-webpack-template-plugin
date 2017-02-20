@@ -3,9 +3,8 @@
 const path = require('path')
 const fs = require('fs')
 const loadConfig = require('./lib/load-config')
-
+const tplEngine = ['handlebars', 'ejs']
 let rootPath = process.cwd()
-let tplEngine = ['handlebars', 'ejs']
 
 function HtmlWebpackTemplate(options) {
   if (!options.template) {
@@ -15,7 +14,7 @@ function HtmlWebpackTemplate(options) {
     let optionRoot = options.root
     rootPath = path.isAbsolute(optionRoot) ? optionRoot : path.resolve(__dirname, optionRoot)
   }
-  if (!options.engine && String(tplEngine).toLowerCase().indexOf(options.engine) === -1) {
+  if (!options.engine || tplEngine.indexOf(options.engine.toLowerCase()) === -1) {
     options.engine = tplEngine[0]
   } else {
     options.engine = options.engine.toLowerCase()
@@ -26,11 +25,12 @@ function HtmlWebpackTemplate(options) {
     engine: options.engine
   }
   this.variableMap = options.variable || {}
+  this.externalHelpers = options.helper || {}
 }
 
 HtmlWebpackTemplate.prototype.apply = function (compiler) {
-  let _this = this
-  let tplContent = ''
+  const _this = this
+  let htmlTpl = ''
 
   compiler.plugin('make', function (compilation, callback) {
     let tplPath = path.isAbsolute(_this.options.template)
@@ -40,7 +40,7 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       encoding: 'utf-8'
     }, function (error, data) {
       if (error) throw error
-      tplContent = data
+      htmlTpl = data
       callback()
     })
   })
@@ -51,21 +51,30 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       if (htmlPluginConf.disableTemplate) {
         return cb(null, htmlData)
       }
-      let tplExtension = (htmlPluginConf.template.match(/\.(\w*)$/) || ['']).pop()
-      let htmlConf
+
+      let configType = (htmlPluginConf.template.match(/\.(\w*)$/) || ['']).pop()
+      let variables
       try {
-        htmlConf = loadConfig(htmlData.html, tplExtension)
+        variables = loadConfig(htmlData.html, configType)
       } catch (error) {
         error.message = htmlPluginConf.filename + ': ' + error.message
         throw error
       }
-      htmlConf = Object.assign(htmlConf, _this.variableMap)
-      let targetHtml = require('./lib/engines/' + _this.options.engine).compile(tplContent)(htmlConf)
+
+      const engine = require('./lib/engines/' + _this.options.engine)
+      Object.keys(_this.externalHelpers).forEach(name => {
+        if (typeof _this.externalHelpers[name] === 'function') {
+          engine.registerHelper(name, _this.externalHelpers[name])
+        }
+      })
+
+      variables = Object.assign({}, _this.variableMap, variables)
+      let targetHtml = engine.compile(htmlTpl)(variables)
       htmlData.html = targetHtml
+
       cb(null, htmlData)
     })
   })
 }
 
 module.exports = HtmlWebpackTemplate
-

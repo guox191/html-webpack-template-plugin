@@ -82,7 +82,9 @@ var webpackConfig = {
 - `root`: project root path. Default to `process.cwd()`.
 - `engine`: `handlebars`(default) | `ejs`.
 - `template`: [required] template file location.
-- `variable`: `Object` A map of predefined variables which will be injected into 
+- `variable`: `Object` A map of predefined variables which will be injected into
+template and can be overwrote by config file.
+- `helper`: `Object` A map of view helpers which will be injected into
 template and can be overwrote by config file.
 
 Extra options added in htmlWebpackPlugin:
