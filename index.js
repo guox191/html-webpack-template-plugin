@@ -46,16 +46,18 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
   })
 
   compiler.plugin('compilation', function (compilation) {
-    compilation.plugin('html-webpack-plugin-before-html-processing', function (htmlData, cb) {
-      let htmlPluginConf = htmlData.plugin.options
+    let htmlPluginConf = {}
+
+    compilation.plugin('html-webpack-plugin-before-html-processing', function (pluginArgs, cb) {
+      htmlPluginConf = pluginArgs.plugin.options
       if (htmlPluginConf.disableTemplate) {
-        return cb(null, htmlData)
+        return cb(null, pluginArgs)
       }
 
       let configType = (htmlPluginConf.template.match(/\.(\w*)$/) || ['']).pop()
       let variables
       try {
-        variables = loadConfig(htmlData.html, configType)
+        variables = loadConfig(pluginArgs.html, configType)
       } catch (error) {
         error.message = htmlPluginConf.filename + ': ' + error.message
         throw error
@@ -70,9 +72,25 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
 
       variables = Object.assign({}, _this.variableMap, variables)
       let targetHtml = engine.compile(htmlTpl)(variables)
-      htmlData.html = targetHtml
+      pluginArgs.html = targetHtml
 
-      cb(null, htmlData)
+      cb(null, pluginArgs)
+    })
+
+    compilation.plugin('html-webpack-plugin-alter-asset-tags', function (pluginArgs, cb) {
+      if (htmlPluginConf.disableTemplate) {
+        return cb()
+      }
+
+      let scriptAttrs = htmlPluginConf.scriptAttribute
+      if (scriptAttrs && typeof scriptAttrs === 'object') {
+        pluginArgs.body.forEach(item => {
+          if (item.tagName === 'script') {
+            Object.assign(item.attributes, scriptAttrs)
+          }
+        })
+      }
+      cb()
     })
   })
 }

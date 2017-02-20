@@ -30,7 +30,11 @@ let entryHtmlPlugins = ENTRY_PAGE.map(item => new htmlWebpackPlugin({
   filename: `${item.chunkName}/index.html`,
   template: `${item.src}/config.${CONFIG_TYPE}`,
   minify: MINIFY_OPTION,
-  chunks: ['common', item.chunkName].concat(item.chunks)
+  chunks: ['common', item.chunkName].concat(item.chunks),
+  scriptAttribute: {
+    crossorigin: 'anonymous',
+    defer: true
+  }
 }))
 
 module.exports = {

@@ -89,6 +89,11 @@ template and can be overwrote by config file.
 
 Extra options added in htmlWebpackPlugin:
 - `disableTemplate`: `true` | `false`(default).
+- `scriptAttribute`: `Object` A map of script attributes will be set
+
+### Tips
+---
+- For boolean attribute, you can set `collapseBooleanAttributes: true` in `html-webpack-plugin` `minify` option to remove `true/false` value.
 
 ### License
 ---
