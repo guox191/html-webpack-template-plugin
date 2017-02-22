@@ -79,7 +79,7 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
 
     compilation.plugin('html-webpack-plugin-alter-asset-tags', function (pluginArgs, cb) {
       if (htmlPluginConf.disableTemplate) {
-        return cb()
+        return cb(null, pluginArgs)
       }
 
       let scriptAttrs = htmlPluginConf.scriptAttribute
@@ -90,7 +90,7 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
           }
         })
       }
-      cb()
+      cb(null, pluginArgs)
     })
   })
 }
