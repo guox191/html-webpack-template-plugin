@@ -1,6 +1,6 @@
 {
   "name": "html-webpack-template-plugin",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Simplifies creation of HTML files based on template and config file",
   "main": "index.js",
   "scripts": {

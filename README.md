@@ -86,6 +86,7 @@ var webpackConfig = {
 template and can be overwrote by config file.
 - `helper`: `Object` A map of view helpers which will be injected into
 template and can be overwrote by config file.
+- `filter`: `Function` A pure function which receives module config and html-webpack-plugin option, return the real config handled by view parser.
 
 Extra options added in htmlWebpackPlugin:
 - `disableTemplate`: `true` | `false`(default).

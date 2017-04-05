@@ -60,7 +60,6 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       try {
         variables = loadConfig(pluginArgs.html, configType)
         let filter = htmlPluginConf.filter || _this.configFilter
-        console.log(htmlPluginConf)
         if (filter) {
           variables = filter(variables, htmlPluginConf)
         }
