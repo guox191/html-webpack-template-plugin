@@ -26,6 +26,10 @@ const MINIFY_OPTION = {
   collapseBooleanAttributes: true
 }
 
+function testFilter(config) {
+  return config.template
+}
+
 let entryHtmlPlugins = ENTRY_PAGE.map(item => new htmlWebpackPlugin({
   filename: `${item.chunkName}/index.html`,
   template: `${item.src}/config.${CONFIG_TYPE}`,
@@ -34,7 +38,8 @@ let entryHtmlPlugins = ENTRY_PAGE.map(item => new htmlWebpackPlugin({
   scriptAttribute: {
     crossorigin: 'anonymous',
     defer: true
-  }
+  },
+  filter: item.chunkName === 'page1' ? testFilter : null,
 }))
 
 module.exports = {

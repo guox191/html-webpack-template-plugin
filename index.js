@@ -26,6 +26,7 @@ function HtmlWebpackTemplate(options) {
   }
   this.variableMap = options.variable || {}
   this.externalHelpers = options.helper || {}
+  this.configFilter = options.filter
 }
 
 HtmlWebpackTemplate.prototype.apply = function (compiler) {
@@ -58,6 +59,11 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       let variables
       try {
         variables = loadConfig(pluginArgs.html, configType)
+        let filter = htmlPluginConf.filter || _this.configFilter
+        console.log(htmlPluginConf)
+        if (filter) {
+          variables = filter(variables, htmlPluginConf)
+        }
       } catch (error) {
         error.message = htmlPluginConf.filename + ': ' + error.message
         throw error
