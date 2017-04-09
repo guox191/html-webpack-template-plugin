@@ -3,6 +3,9 @@
 [![npm](https://nodei.co/npm/html-webpack-template-plugin.png?downloads=true)](https://www.npmjs.com/package/html-webpack-template-plugin)
 
 [![travis](https://travis-ci.org/guox191/html-webpack-template-plugin.svg?branch=master)](https://travis-ci.org/guox191/html-webpack-template-plugin)
+[![appveyor](https://ci.appveyor.com/api/projects/status/kx9fps2lg4fxx8ut?svg=true
+)](https://ci.appveyor.com/project/guox191/html-webpack-template-plugin)
+[![Coverage Status](https://coveralls.io/repos/github/guox191/html-webpack-template-plugin/badge.svg)](https://coveralls.io/github/guox191/html-webpack-template-plugin)
 
 Simplifies creation of HTML files based on template and config file Edit.
 

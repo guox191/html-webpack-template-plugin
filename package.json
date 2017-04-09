@@ -4,7 +4,9 @@
   "description": "Simplifies creation of HTML files based on template and config file",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./test --recursive"
+    "test": "mocha ./test --recursive",
+    "cover": "istanbul cover _mocha",
+    "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -27,7 +29,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.13.0",
     "html-webpack-plugin": "^2.26.0",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "webpack": "2.2.1"
   }
