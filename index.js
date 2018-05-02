@@ -48,9 +48,15 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
     compiler.hooks.compilation.tap.bind(compiler.hooks.compilation, PLUGIN_LABEL) :
     compiler.plugin.bind(compiler, 'compilation')
   )(function (compilation) {
+    if (compilation.hooks && !compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing) {
+      const message = 'compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing is lost. ' +
+      `Please make sure you have installed html-webpack-plugin and instantiated it before ${PLUGIN_LABEL}.`
+      throw new Error(message)
+    }
+
     let htmlPluginConf = {}
 
-    ;(compiler.hooks ?
+    ;(compilation.hooks ?
       compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync.bind(compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing, PLUGIN_LABEL) :
       compilation.plugin.bind(compilation, 'html-webpack-plugin-before-html-processing')
     )(function (pluginArgs, cb) {
@@ -86,7 +92,7 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       cb(null, pluginArgs)
     })
 
-    ;(compiler.hooks ?
+    ;(compilation.hooks ?
       compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync.bind(compilation.hooks.htmlWebpackPluginAlterAssetTags, PLUGIN_LABEL) :
       compilation.plugin.bind(compilation, 'html-webpack-plugin-alter-asset-tags')
     )(function (pluginArgs, cb) {
