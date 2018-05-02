@@ -49,7 +49,7 @@ Template file parsed by template engine like `handlebars` or `ejs`, which suppor
 </html>
 ```
 
-As mentioned above, every module has own template config file. You can write it by `yaml`/`json`/`js`.
+As mentioned above, every module has own template config file. You can write it by `yaml`/`json`.
 
 `{{module}}/index.yml`
 

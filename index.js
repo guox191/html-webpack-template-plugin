@@ -50,7 +50,6 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
   )(function (compilation) {
     let htmlPluginConf = {}
 
-    console.log(compilation.hooks)
     ;(compiler.hooks ?
       compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync.bind(compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing, PLUGIN_LABEL) :
       compilation.plugin.bind(compilation, 'html-webpack-plugin-before-html-processing')
