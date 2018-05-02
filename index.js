@@ -4,6 +4,7 @@ const path = require('path')
 const fs = require('fs')
 const loadConfig = require('./lib/load-config')
 const tplEngine = ['handlebars', 'ejs']
+const PLUGIN_LABEL = 'HtmlWebpackTemplatePlugin'
 let rootPath = process.cwd()
 
 function HtmlWebpackTemplate(options) {
@@ -33,23 +34,26 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
   const _this = this
   let htmlTpl = ''
 
-  compiler.plugin('make', function (compilation, callback) {
-    let tplPath = path.isAbsolute(_this.options.template)
+  ;(compiler.hooks ?
+    compiler.hooks.afterPlugins.tap.bind(compiler.hooks.afterPlugins, PLUGIN_LABEL) :
+    compiler.plugin.bind(compiler, 'after-plugins')
+  )(function () {
+    const tplPath = path.isAbsolute(_this.options.template)
       ? _this.options.template
       : path.join(rootPath, _this.options.template)
-    fs.readFile(tplPath, {
-      encoding: 'utf-8'
-    }, function (error, data) {
-      if (error) throw error
-      htmlTpl = data
-      callback()
-    })
+    htmlTpl = fs.readFileSync(tplPath, { encoding: 'utf-8' })
   })
 
-  compiler.plugin('compilation', function (compilation) {
+  ;(compiler.hooks ?
+    compiler.hooks.compilation.tap.bind(compiler.hooks.compilation, PLUGIN_LABEL) :
+    compiler.plugin.bind(compiler, 'compilation')
+  )(function (compilation) {
     let htmlPluginConf = {}
 
-    compilation.plugin('html-webpack-plugin-before-html-processing', function (pluginArgs, cb) {
+    ;(compiler.hooks ?
+      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync.bind(compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing, PLUGIN_LABEL) :
+      compilation.plugin.bind(compilation, 'html-webpack-plugin-before-html-processing')
+    )(function (pluginArgs, cb) {
       htmlPluginConf = pluginArgs.plugin.options
       if (htmlPluginConf.disableTemplate) {
         return cb(null, pluginArgs)
@@ -82,7 +86,10 @@ HtmlWebpackTemplate.prototype.apply = function (compiler) {
       cb(null, pluginArgs)
     })
 
-    compilation.plugin('html-webpack-plugin-alter-asset-tags', function (pluginArgs, cb) {
+    ;(compiler.hooks ?
+      compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync.bind(compilation.hooks.htmlWebpackPluginAlterAssetTags, PLUGIN_LABEL) :
+      compilation.plugin.bind(compilation, 'html-webpack-plugin-alter-asset-tags')
+    )(function (pluginArgs, cb) {
       if (htmlPluginConf.disableTemplate) {
         return cb(null, pluginArgs)
       }
